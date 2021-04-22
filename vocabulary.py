@@ -8,7 +8,7 @@ value = 0
 
 
 def many_words(update, context):
-    update.message.reply_text("Выберете, над какой частью речи Вы хотите поиздеваться)) :",
+    update.message.reply_text("Выберите часть речи:",
                               reply_markup=ReplyKeyboardMarkup(main_csp.PART_OF_SPEECH, resize_keyboard=True))
 
 
@@ -49,7 +49,7 @@ def task(context):
     updated.message.reply_text(text, parse_mode=ParseMode.MARKDOWN,
                                reply_markup=ReplyKeyboardMarkup([['🔙вернуться назад🔙']], resize_keyboard=True))
     res, text = know_result_many_words()
-    updated.message.reply_text("*Поздравляю!*👇\n_Твой результат:_ " + str(res), parse_mode=ParseMode.MARKDOWN)
+    updated.message.reply_text("*Поздравляю!*👇\n_Ваш результат:_ " + str(res), parse_mode=ParseMode.MARKDOWN)
     updated.message.reply_text(text, parse_mode=ParseMode.MARKDOWN)
 
     con = sqlite3.connect("bd_tgbot_comskills.db")
@@ -73,13 +73,13 @@ def know_result_many_words():
     con.close()
     if value < (summa / kolvo):
         return value,\
-               "Ты сказал меньше слов, чем говорят в среднем. Но я уверена, это _неокончательный результат_!!!💜"
+               "Вы сказали меньше слов, чем говорят в среднем. Но я уверена, это _неокончательный результат_!!!💜"
     else:
-        return value,  "Ты сказал больше слов, чем говорят в среднем. Мои поздравления! _Дальше - больше_💜"
+        return value,  "Вы сказали больше слов, чем говорят в среднем. Мои поздравления! _Дальше - больше_💜"
 
 
 def be_back_to_the_menu_many_words(update, context):
-    update.message.reply_text("Вы вернулись назад.",
+    update.message.reply_text("Вы вернулись назад:",
                               reply_markup=ReplyKeyboardMarkup(main_csp.MENU_MANY_WORDS, resize_keyboard=True))
     global value
     value = 0

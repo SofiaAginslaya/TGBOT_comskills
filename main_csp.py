@@ -17,12 +17,12 @@ SECTION_OTHER = [["оценка"], ["автор проекта"], ["мотива
 
 def start(update, context):
     update.message.reply_text(
-        "Привет!👋 Я твой бот-помощник по развитию коммуникативных навыков.\n\nМожешь называть меня Sofia! :)",
+        "Привет!👋 Я Ваш бот-помощник по развитию коммуникативных навыков.\n\nМожете называть меня Sofia! :)",
         reply_markup=ReplyKeyboardMarkup(MAIN_MENU, one_time_keyboard=False, resize_keyboard=True))
 
 
 def sofia(update, context):
-    update.message.reply_text("Я тут! Чем могу тебе помочь?)",
+    update.message.reply_text("Я тут! Чем могу Вам помочь?)",
                               reply_markup=ReplyKeyboardMarkup(MAIN_MENU, resize_keyboard=True))
 
 
@@ -37,7 +37,7 @@ def all_ex(update, context):
 
 
 def otherr(update, context):
-    update.message.reply_text("Тебе правда интересен этот раздел?..🥺",
+    update.message.reply_text("Вам правда интересен этот раздел?..🥺",
                               reply_markup=ReplyKeyboardMarkup(SECTION_OTHER, resize_keyboard=True))
 
 
@@ -85,7 +85,7 @@ def main():
     dp.add_handler(MessageHandler(Filters.regex("что вижу, о том и пою"), long_song_about.long_song_about))
     dp.add_handler(MessageHandler(Filters.regex("словечко"), long_song_about.song_about_word))
     # dp.add_handler(MessageHandler(Filters.regex("картинка"), long_song_about.song_about_picture))
-    dp.add_handler(MessageHandler(Filters.regex("заменить слово"), long_song_about.song_about_word))
+    dp.add_handler(MessageHandler(Filters.regex("следующее слово"), long_song_about.song_about_word))
     dp.add_handler(MessageHandler(Filters.regex("я закончил"), all_ex))
 
     dp.add_handler(CommandHandler("be_back_mm", be_back_to_the_main_menu))

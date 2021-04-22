@@ -30,7 +30,6 @@ for quote in soup1:
             words_list += str(words_counter) + "" + quote1 + "\n"
 
 
-
 def long_song_about(update, context):
     con = sqlite3.connect("bd_tgbot_comskills.db")
     cursor = con.cursor()
@@ -56,5 +55,5 @@ def song_about_word(update, context):
     word_random = words_list[words_list.find(str(random_number)) +
                              len(str(random_number)):words_list.find(str(random_number + 1))]
     update.message.reply_text('_' + word_random + '_',
-                              reply_markup=ReplyKeyboardMarkup([["🔃заменить слово🔃"], ["я закончил"], ["я закончила"]],
+                              reply_markup=ReplyKeyboardMarkup([["🔃следующее слово🔃"], ["я закончил"], ["я закончила"]],
                                                                resize_keyboard=True), parse_mode=ParseMode.MARKDOWN)
