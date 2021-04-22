@@ -69,11 +69,8 @@ def know_result_many_words():
     con = sqlite3.connect("bd_tgbot_comskills.db")
     cursor = con.cursor()
     result = cursor.execute(f"SELECT {letter} FROM counters_and_marks").fetchall()
-    summa, kolvo = 0, 0
-    for i in result:
-        if i[0] is not None:
-            summa += int(i[0])
-            kolvo += 1
+    summa, kolvo = main_csp.counter_comparison(result)
+    con.close()
     if value < (summa / kolvo):
         return value,\
                "Ты сказал меньше слов, чем говорят в среднем. Но я уверена, это _неокончательный результат_!!!💜"

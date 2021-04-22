@@ -15,6 +15,20 @@ with open('test.html', 'w') as output_file:
 
 soup1 = soup.find_all('td')
 DIGITS = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"]
+words_list = ""
+words_counter = 0
+
+for quote in soup1:
+    how_not_much_digits = 0
+    quote1 = str(quote.text)
+    if len(quote1) != 0:
+        for i in range(0, 10):
+            if DIGITS[i] not in quote1:
+                how_not_much_digits += 1
+        if how_not_much_digits == 10:
+            words_counter += 1
+            words_list += str(words_counter) + "" + quote1 + "\n"
+
 
 
 def long_song_about(update, context):
@@ -37,20 +51,6 @@ def long_song_about(update, context):
 
 
 def song_about_word(update, context):
-    words_list = ""
-    words_counter = 0
-
-    for quote in soup1:
-        how_not_much_digits = 0
-        quote1 = str(quote.text)
-        if len(quote1) != 0:
-            for i in range(0, 10):
-                if DIGITS[i] not in quote1:
-                    how_not_much_digits += 1
-            if how_not_much_digits == 10:
-                words_counter += 1
-                words_list += str(words_counter) + "" + quote1 + "\n"
-
     random_number = random.randint(5, 1000)
 
     word_random = words_list[words_list.find(str(random_number)) +

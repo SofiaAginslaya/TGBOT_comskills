@@ -1,16 +1,18 @@
 # communication skills progress
-from telegram.ext import Updater, MessageHandler, Filters, CommandHandler
+from telegram.ext import Updater, MessageHandler, Filters, CommandHandler, CallbackQueryHandler
 from telegram import ReplyKeyboardMarkup
 from settings import TG_TOKEN
 import vocabulary
 import long_song_about
+import other
 
 
-MAIN_MENU = [["все упражнения"], ["оценить приложение"], ["автор проекта", "мотивация"]]
+MAIN_MENU = [["все упражнения"], ["↪прочее↩"]]
 MENU_MANY_WORDS = [["для увеличения словарного запаса"],
                    ["что вижу, о том и пою"], ["вернуться в главное меню"]]
 PART_OF_SPEECH = [["имена\nсуществительные", "имена\nприлагательные"], ["глаголы", "наречия"],
                   ["🔙вернуться назад🔙", "позвать Sofia"]]
+SECTION_OTHER = [["оценка"], ["автор проекта"], ["мотивация создания бота"], ["вернуться в главное меню"]]
 
 
 def start(update, context):
@@ -34,6 +36,20 @@ def all_ex(update, context):
                               reply_markup=ReplyKeyboardMarkup(MENU_MANY_WORDS, resize_keyboard=True))
 
 
+def otherr(update, context):
+    update.message.reply_text("Тебе правда интересен этот раздел?..🥺",
+                              reply_markup=ReplyKeyboardMarkup(SECTION_OTHER, resize_keyboard=True))
+
+
+def counter_comparison(result):
+    summa, kolvo = 0, 0
+    for i in result:
+        if i[0] is not None:
+            summa += int(i[0])
+            kolvo += 1
+    return summa, kolvo
+
+
 def main():
     updater = Updater(TG_TOKEN, use_context=True)
 
@@ -43,6 +59,16 @@ def main():
     dp.add_handler(MessageHandler(Filters.regex("начать"), start))
     dp.add_handler(CommandHandler("Sofia", sofia))
     dp.add_handler(MessageHandler(Filters.regex("Sofia"), sofia))
+
+    dp.add_handler(MessageHandler(Filters.regex("прочее"), otherr))
+    dp.add_handler(MessageHandler(Filters.regex("поставить оценку"), other.set_mark))
+    dp.add_handler(MessageHandler(Filters.regex("узнать рейтинг"), other.know_mark))
+    dp.add_handler(MessageHandler(Filters.regex("оценка"), other.mark))
+    dp.add_handler(MessageHandler(Filters.regex("1"), other.add_mark_to_bd))
+    dp.add_handler(MessageHandler(Filters.regex("2"), other.add_mark_to_bd))
+    dp.add_handler(MessageHandler(Filters.regex("3"), other.add_mark_to_bd))
+    dp.add_handler(MessageHandler(Filters.regex("4"), other.add_mark_to_bd))
+    dp.add_handler(MessageHandler(Filters.regex("5"), other.add_mark_to_bd))
 
     dp.add_handler(CommandHandler("all_ex", all_ex))
     dp.add_handler(MessageHandler(Filters.regex("все упражнения"), all_ex))
@@ -58,13 +84,16 @@ def main():
 
     dp.add_handler(MessageHandler(Filters.regex("что вижу, о том и пою"), long_song_about.long_song_about))
     dp.add_handler(MessageHandler(Filters.regex("словечко"), long_song_about.song_about_word))
-    dp.add_handler(MessageHandler(Filters.regex("🔃заменить слово🔃"), long_song_about.song_about_word))
+    # dp.add_handler(MessageHandler(Filters.regex("картинка"), long_song_about.song_about_picture))
+    dp.add_handler(MessageHandler(Filters.regex("заменить слово"), long_song_about.song_about_word))
     dp.add_handler(MessageHandler(Filters.regex("я закончил"), all_ex))
 
     dp.add_handler(CommandHandler("be_back_mm", be_back_to_the_main_menu))
     dp.add_handler(MessageHandler(Filters.regex("вернуться в главное меню"), be_back_to_the_main_menu))
     dp.add_handler(CommandHandler("be_back", vocabulary.be_back_to_the_menu_many_words))
     dp.add_handler(MessageHandler(Filters.regex("вернуться назад"), vocabulary.be_back_to_the_menu_many_words))
+    dp.add_handler(CommandHandler("be_back_ot", other.be_back_other))
+    dp.add_handler(MessageHandler(Filters.regex("вернуться обратно"), other.be_back_other))
 
     updater.start_polling()
     updater.idle()
