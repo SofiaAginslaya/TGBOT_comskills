@@ -4,13 +4,14 @@ from telegram import ReplyKeyboardMarkup
 from settings import TG_TOKEN
 import vocabulary
 import long_song_about
+import english_quotes
 import other
 import sqlite3
 
 
 MAIN_MENU = [["все упражнения"], ["↪прочее↩"]]
-MENU_MANY_WORDS = [["для увеличения словарного запаса"],
-                   ["что вижу, о том и пою"], ["вернуться в главное меню"]]
+MENU_MANY_WORDS = [["для увеличения словарного запаса"], ["что вижу, о том и пою"],
+                   ["развитие английской речи"], ["вернуться в главное меню"]]
 PART_OF_SPEECH = [["имена\nсуществительные", "имена\nприлагательные"], ["глаголы", "наречия"],
                   ["🔙вернуться назад🔙", "🐒позвать Sofia🐒"]]
 SECTION_OTHER = [["оценка"], ["автор проекта"], ["мотивация создания бота"], ["вернуться в главное меню"]]
@@ -77,6 +78,10 @@ def main():
     dp.add_handler(MessageHandler(Filters.regex("рейтинг"), other.get_rating))
     dp.add_handler(MessageHandler(Filters.regex("оценка"), other.mark))
     dp.add_handler(CallbackQueryHandler(other.add_mark_to_bd))
+    dp.add_handler(MessageHandler(Filters.regex("автор"), other.author))
+    dp.add_handler(CommandHandler("author", other.author))
+    dp.add_handler(MessageHandler(Filters.regex("мотивация"), other.motivation))
+    dp.add_handler(CommandHandler("motivation", other.motivation))
 
     dp.add_handler(CommandHandler("all_ex", all_ex))
     dp.add_handler(MessageHandler(Filters.regex("все упражнения"), all_ex))
@@ -90,9 +95,14 @@ def main():
     dp.add_handler(MessageHandler(Filters.regex("плюс"), vocabulary.plus_one))
 
     dp.add_handler(MessageHandler(Filters.regex("что вижу, о том и пою"), long_song_about.long_song_about))
+    dp.add_handler(CommandHandler("song_about", long_song_about.long_song_about))
     dp.add_handler(MessageHandler(Filters.regex("словечко"), long_song_about.song_about_word))
     dp.add_handler(MessageHandler(Filters.regex("следующее слово"), long_song_about.song_about_word))
     dp.add_handler(MessageHandler(Filters.regex("я закончил"), all_ex))
+
+    dp.add_handler(MessageHandler(Filters.regex("развитие английской речи"), english_quotes.english_speech))
+    dp.add_handler(CommandHandler("eng_quotes", english_quotes.english_speech))
+    dp.add_handler(MessageHandler(Filters.regex("цитата"), english_quotes.get_quote))
 
     dp.add_handler(CommandHandler("be_back_mm", be_back_to_the_main_menu))
     dp.add_handler(MessageHandler(Filters.regex("вернуться в главное меню"), be_back_to_the_main_menu))

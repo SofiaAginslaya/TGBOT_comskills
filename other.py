@@ -3,6 +3,24 @@ import main_csp
 from telegram import ReplyKeyboardMarkup, InlineKeyboardMarkup, InlineKeyboardButton, ParseMode
 
 
+def author(update, context):
+    update.message.reply_text("Спасибо, что поинтересовался❣\nМне очень приятно💓\n\nВот мои контакты:\n@sofa_gans")
+    con, cursor = main_csp.get_cursor()
+    cursor.execute(f"INSERT INTO counters_and_marks(автор) VALUES(?)", (1,))
+    con.commit()
+    con.close()
+
+
+def motivation(update, context):
+    update.message.reply_text("В какой-то момент я захотела потренировать свои коммуникативные навыки, но, увы, нашла"
+                              " такое приложение только на ОП Android, что меня очень расстроило, так как я обладаю"
+                              " IOS.\nК тому же, я не нашла никаких ботов для развития тех же навыков, именно поэтому"
+                              ", как говорил великий Линус Торвальдс, 'Пришлось пойти дальше и дизассемблировать "
+                              "операционную систему'; в моем же случае: создать своего бота, которому я смогу "
+                              "довериться и которого я смогу дополнять по своему вкусу🧜‍♀‍‍")
+    print(update.message.chat.username, update.message.chat.first_name, update.message.chat.last_name)
+
+
 def mark(update, context):
     update.message.reply_text("Вы хотите поставить/изменить оценку боту или узнать рейтинг?🙃",
                               reply_markup=ReplyKeyboardMarkup(main_csp.MARK_MENU,
@@ -43,7 +61,8 @@ def add_mark_to_bd(bot, update):
     con, cursor = main_csp.get_cursor()
     check = cursor.execute(f"SELECT user_id FROM marks").fetchall()
     mark = cursor.execute(f"SELECT mark FROM marks WHERE user_id = '{user}' ").fetchone()
-    if user in check[0]:
+    users = [us[0] for us in check]
+    if user in users:
         update.bot.edit_message_caption(
             caption=f"Вы уже ставили оценку! Ваша оценка: {mark[0]}",
             chat_id=user,
@@ -55,8 +74,9 @@ def add_mark_to_bd(bot, update):
             chat_id=user,
             message_id=query.message.message_id
         )
-        result = f'''INSERT INTO marks(user_id, mark) VALUES(?, ?)'''
-        cursor.execute(result, (query.message.chat.id, int(query.data)))
+        result = f'''INSERT INTO marks(user_id, username, name, mark) VALUES(?, ?, ?, ?)'''
+        cursor.execute(result, (query.message.chat.id, query.message.chat.username,
+                                query.message.chat.first_name + query.message.chat.last_name, int(query.data)))
         con.commit()
         con.close()
 
