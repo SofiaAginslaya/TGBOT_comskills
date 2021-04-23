@@ -1,6 +1,5 @@
 # для развития коммуникативных навыков
 from telegram import ParseMode, ReplyKeyboardMarkup
-import sqlite3
 import main_csp
 
 global value
@@ -13,8 +12,7 @@ def many_words(update, context):
 
 
 def goals_many_words(update, context):
-    con = sqlite3.connect("bd_tgbot_comskills.db")
-    cursor = con.cursor()
+    con, cursor = main_csp.get_cursor()
     global letter
     letter = "".join(update.message.text.split())
     print(letter)
@@ -52,8 +50,7 @@ def task(context):
     updated.message.reply_text("*Поздравляю!*👇\n_Ваш результат:_ " + str(res), parse_mode=ParseMode.MARKDOWN)
     updated.message.reply_text(text, parse_mode=ParseMode.MARKDOWN)
 
-    con = sqlite3.connect("bd_tgbot_comskills.db")
-    cursor = con.cursor()
+    con, cursor = main_csp.get_cursor()
     query = f'''INSERT INTO counters_and_marks({letter}) VALUES(?)'''
     cursor.execute(query, (res,))
     con.commit()
@@ -66,8 +63,7 @@ def plus_one(update, context):
 
 
 def know_result_many_words():
-    con = sqlite3.connect("bd_tgbot_comskills.db")
-    cursor = con.cursor()
+    con, cursor = main_csp.get_cursor()
     result = cursor.execute(f"SELECT {letter} FROM counters_and_marks").fetchall()
     summa, kolvo = main_csp.counter_comparison(result)
     con.close()

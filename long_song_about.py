@@ -1,11 +1,11 @@
 # что вижу, о том и пою
 from telegram import ReplyKeyboardMarkup, ParseMode
-import sqlite3
 import requests
 from bs4 import BeautifulSoup
 import random
+import main_csp
 
-
+# такое непристойное решение задачи по причине того, что я не нашла api русского словаря
 url = 'http://dict.ruslang.ru/freq.php?act=show&dic=freq_s&title=%D7%E0%F1%F2%EE%F2%ED%FB%E9%20%F1%EF%E8%F1%EE%EA%20%' \
       'E8%EC%E5%ED%20%F1%F3%F9%E5%F1%F2%E2%E8%F2%E5%EB%FC%ED%FB%F5'
 r = requests.get(url)
@@ -31,8 +31,7 @@ for quote in soup1:
 
 
 def long_song_about(update, context):
-    con = sqlite3.connect("bd_tgbot_comskills.db")
-    cursor = con.cursor()
+    con, cursor = main_csp.get_cursor()
     letter = update.message.text
     print(letter)
     goal = cursor.execute(f"""
@@ -42,10 +41,9 @@ def long_song_about(update, context):
     update.message.reply_text("🅰🅱🅾🅱🅰\n🤓При регулярной практике вскоре вы сможете задвинуть часовую лекцию про ластик, "
                               "стул или дверцу шкафа:))🤠", parse_mode=ParseMode.MARKDOWN)
     update.message.reply_text("*Частота выполнения:* \n♾♾♾♾♾♾♾♾\n" + goal[2] + "\n♾♾♾♾♾♾♾♾",
-                              parse_mode=ParseMode.MARKDOWN)
-    update.message.reply_text("Выберите: будете описывать слово (предмет, черта характера, профессия и тд) или картинку"
-                              , reply_markup=ReplyKeyboardMarkup([["словечко", "картинка"], ["🔙вернуться назад🔙"]],
-                                                                 resize_keyboard=True))
+                              parse_mode=ParseMode.MARKDOWN, reply_markup=ReplyKeyboardMarkup([["🤏словечко🤏"],
+                                                                                               ["🔙вернуться назад🔙"]],
+                                                                                              resize_keyboard=True))
     con.close()
 
 

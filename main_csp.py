@@ -5,14 +5,17 @@ from settings import TG_TOKEN
 import vocabulary
 import long_song_about
 import other
+import sqlite3
 
 
 MAIN_MENU = [["все упражнения"], ["↪прочее↩"]]
 MENU_MANY_WORDS = [["для увеличения словарного запаса"],
                    ["что вижу, о том и пою"], ["вернуться в главное меню"]]
 PART_OF_SPEECH = [["имена\nсуществительные", "имена\nприлагательные"], ["глаголы", "наречия"],
-                  ["🔙вернуться назад🔙", "позвать Sofia"]]
+                  ["🔙вернуться назад🔙", "🐒позвать Sofia🐒"]]
 SECTION_OTHER = [["оценка"], ["автор проекта"], ["мотивация создания бота"], ["вернуться в главное меню"]]
+MARK_MENU = [["поставить оценку", "узнать рейтинг", "изменить оценку"],
+             ["вернуться обратно", "🐒позвать Sofia🐒"]]
 
 
 def start(update, context):
@@ -22,7 +25,7 @@ def start(update, context):
 
 
 def sofia(update, context):
-    update.message.reply_text("Я тут! Чем могу Вам помочь?)",
+    update.message.reply_text("Я тут! Чем могу Вам помочь?)🐒",
                               reply_markup=ReplyKeyboardMarkup(MAIN_MENU, resize_keyboard=True))
 
 
@@ -50,6 +53,12 @@ def counter_comparison(result):
     return summa, kolvo
 
 
+def get_cursor():
+    con = sqlite3.connect("bd_tgbot_comskills.db")
+    cursor = con.cursor()
+    return con, cursor
+
+
 def main():
     updater = Updater(TG_TOKEN, use_context=True)
 
@@ -61,14 +70,13 @@ def main():
     dp.add_handler(MessageHandler(Filters.regex("Sofia"), sofia))
 
     dp.add_handler(MessageHandler(Filters.regex("прочее"), otherr))
+    dp.add_handler(CommandHandler("other", otherr))
     dp.add_handler(MessageHandler(Filters.regex("поставить оценку"), other.set_mark))
-    dp.add_handler(MessageHandler(Filters.regex("узнать рейтинг"), other.know_mark))
+    dp.add_handler(MessageHandler(Filters.regex("изменить оценку"), other.change_mark))
+    dp.add_handler(CommandHandler("rating", other.get_rating))
+    dp.add_handler(MessageHandler(Filters.regex("рейтинг"), other.get_rating))
     dp.add_handler(MessageHandler(Filters.regex("оценка"), other.mark))
-    dp.add_handler(MessageHandler(Filters.regex("1"), other.add_mark_to_bd))
-    dp.add_handler(MessageHandler(Filters.regex("2"), other.add_mark_to_bd))
-    dp.add_handler(MessageHandler(Filters.regex("3"), other.add_mark_to_bd))
-    dp.add_handler(MessageHandler(Filters.regex("4"), other.add_mark_to_bd))
-    dp.add_handler(MessageHandler(Filters.regex("5"), other.add_mark_to_bd))
+    dp.add_handler(CallbackQueryHandler(other.add_mark_to_bd))
 
     dp.add_handler(CommandHandler("all_ex", all_ex))
     dp.add_handler(MessageHandler(Filters.regex("все упражнения"), all_ex))
@@ -78,13 +86,11 @@ def main():
     dp.add_handler(MessageHandler(Filters.regex("имена\nприлагательные"), vocabulary.goals_many_words))
     dp.add_handler(MessageHandler(Filters.regex("глаголы"), vocabulary.goals_many_words))
     dp.add_handler(MessageHandler(Filters.regex("наречия"), vocabulary.goals_many_words))
-    dp.add_handler(CommandHandler("timer_for_many_words", vocabulary.set_timer_for_many_words))
     dp.add_handler(MessageHandler(Filters.regex("начнем!"), vocabulary.set_timer_for_many_words))
     dp.add_handler(MessageHandler(Filters.regex("плюс"), vocabulary.plus_one))
 
     dp.add_handler(MessageHandler(Filters.regex("что вижу, о том и пою"), long_song_about.long_song_about))
     dp.add_handler(MessageHandler(Filters.regex("словечко"), long_song_about.song_about_word))
-    # dp.add_handler(MessageHandler(Filters.regex("картинка"), long_song_about.song_about_picture))
     dp.add_handler(MessageHandler(Filters.regex("следующее слово"), long_song_about.song_about_word))
     dp.add_handler(MessageHandler(Filters.regex("я закончил"), all_ex))
 
