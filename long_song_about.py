@@ -5,7 +5,7 @@ from bs4 import BeautifulSoup
 import random
 import main_csp
 
-# такое непристойное решение задачи по причине того, что я не нашла api русского словаря
+# такое strange решение задачи по причине того, что я не нашла api русского словаря
 url = 'http://dict.ruslang.ru/freq.php?act=show&dic=freq_s&title=%D7%E0%F1%F2%EE%F2%ED%FB%E9%20%F1%EF%E8%F1%EE%EA%20%' \
       'E8%EC%E5%ED%20%F1%F3%F9%E5%F1%F2%E2%E8%F2%E5%EB%FC%ED%FB%F5'
 r = requests.get(url)
@@ -33,9 +33,9 @@ for quote in soup1:
 def long_song_about(update, context):
     con, cursor = main_csp.get_cursor()
     letter = update.message.text
-    print(letter)
+    print(letter[1:-1])
     goal = cursor.execute(f"""
-        SELECT goal, how_to_do, frequency FROM parts_of_speech WHERE part_of_sp = "{letter}" """).fetchone()
+        SELECT goal, how_to_do, frequency FROM parts_of_speech WHERE part_of_sp = "{letter[1:-1]}" """).fetchone()
     update.message.reply_text("*Цель:* \n☑ _" + goal[0] + "_☑", parse_mode=ParseMode.MARKDOWN)
     update.message.reply_text("*Как выполнять:* \n🆙" + goal[1], parse_mode=ParseMode.MARKDOWN)
     update.message.reply_text("🅰🅱🅾🅱🅰\n🤓При регулярной практике вскоре вы сможете задвинуть часовую лекцию про ластик, "

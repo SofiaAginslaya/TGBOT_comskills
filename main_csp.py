@@ -9,25 +9,31 @@ import other
 import sqlite3
 
 
-MAIN_MENU = [["все упражнения"], ["↪прочее↩"]]
-MENU_MANY_WORDS = [["для увеличения словарного запаса"], ["что вижу, о том и пою"],
-                   ["развитие английской речи"], ["вернуться в главное меню"]]
+MAIN_MENU = [["🦋все упражнения🦋"], ["↪прочее↩"]]
+MENU_MANY_WORDS = [["🐣для увеличения словарного запаса🐥"], ["🎤что вижу, о том и пою🎤"],
+                   ["🔡развитие английской речи🔠	"], ["🔙вернуться в главное меню🔙"]]
+SECTION_OTHER = [["🐝оценка🐝"], ["🐾автор проекта🐾"], ["👣мотивация создания бота👣"], ["🔙вернуться в главное меню🔙"]]
 PART_OF_SPEECH = [["имена\nсуществительные", "имена\nприлагательные"], ["глаголы", "наречия"],
                   ["🔙вернуться назад🔙", "🐒позвать Sofia🐒"]]
-SECTION_OTHER = [["оценка"], ["автор проекта"], ["мотивация создания бота"], ["вернуться в главное меню"]]
-MARK_MENU = [["поставить оценку", "узнать рейтинг", "изменить оценку"],
-             ["вернуться обратно", "🐒позвать Sofia🐒"]]
+MARK_MENU = [["🆕поставить оценку🆕", "💌узнать рейтинг💌", "🔢изменить оценку🔢"],
+             ["🔙вернуться обратно🔙", "🐒позвать Sofia🐒"]]
 
 
 def start(update, context):
-    update.message.reply_text(
-        "Привет!👋 Я Ваш бот-помощник по развитию коммуникативных навыков.\n\nМожете называть меня Sofia! :)",
-        reply_markup=ReplyKeyboardMarkup(MAIN_MENU, one_time_keyboard=False, resize_keyboard=True))
+    update.message.reply_text(f"Привет, {update.message.chat.first_name}!👋 Я Ваш бот-помощник по развитию "
+                              f"коммуникативных навыков.\n\nМожете называть меня Sofia! :)",
+                              reply_markup=ReplyKeyboardMarkup(MAIN_MENU,
+                                                               one_time_keyboard=False, resize_keyboard=True))
 
 
 def sofia(update, context):
     update.message.reply_text("Я тут! Чем могу Вам помочь?)🐒",
                               reply_markup=ReplyKeyboardMarkup(MAIN_MENU, resize_keyboard=True))
+
+
+def what_is_it(update, context):
+    update.message.reply_text("Извините, не знаю такой команды: " + update.message.text,
+                              reply_markup=ReplyKeyboardMarkup([["🐒позвать Sofia🐒"]], resize_keyboard=True))
 
 
 def be_back_to_the_main_menu(update, context):
@@ -44,6 +50,8 @@ def otherr(update, context):
     update.message.reply_text("Вам правда интересен этот раздел?..🥺",
                               reply_markup=ReplyKeyboardMarkup(SECTION_OTHER, resize_keyboard=True))
 
+
+# вспомогательные функции (методы)
 
 def counter_comparison(result):
     summa, kolvo = 0, 0
@@ -110,6 +118,8 @@ def main():
     dp.add_handler(MessageHandler(Filters.regex("вернуться назад"), vocabulary.be_back_to_the_menu_many_words))
     dp.add_handler(CommandHandler("be_back_ot", other.be_back_other))
     dp.add_handler(MessageHandler(Filters.regex("вернуться обратно"), other.be_back_other))
+
+    dp.add_handler(MessageHandler(Filters.text, what_is_it))
 
     updater.start_polling()
     updater.idle()

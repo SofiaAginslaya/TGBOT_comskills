@@ -6,7 +6,7 @@ from telegram import ReplyKeyboardMarkup, InlineKeyboardMarkup, InlineKeyboardBu
 def author(update, context):
     update.message.reply_text("Спасибо, что поинтересовался❣\nМне очень приятно💓\n\nВот мои контакты:\n@sofa_gans")
     con, cursor = main_csp.get_cursor()
-    cursor.execute(f"INSERT INTO counters_and_marks(автор) VALUES(?)", (1,))
+    cursor.execute(f"INSERT INTO counters_and_marks(username) VALUES(?)", (update.message.chat.username,))
     con.commit()
     con.close()
 
@@ -57,6 +57,8 @@ def change_mark(bot, update):
 
 def add_mark_to_bd(bot, update):
     query = bot.callback_query
+    if int(query.data) == 1 or int(query.data) == 2:
+        update.message.reply_text("обидно🤧")
     user = query.message.chat.id
     con, cursor = main_csp.get_cursor()
     check = cursor.execute(f"SELECT user_id FROM marks").fetchall()

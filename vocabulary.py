@@ -51,8 +51,8 @@ def task(context):
     updated.message.reply_text(text, parse_mode=ParseMode.MARKDOWN)
 
     con, cursor = main_csp.get_cursor()
-    query = f'''INSERT INTO counters_and_marks({letter}) VALUES(?)'''
-    cursor.execute(query, (res,))
+    query = f'''INSERT INTO counters_and_marks({letter}, username) VALUES(?, ?)'''
+    cursor.execute(query, (res, updated.message.chat.username))
     con.commit()
     con.close()
 
