@@ -57,8 +57,9 @@ def change_mark(bot, update):
 
 def add_mark_to_bd(bot, update):
     query = bot.callback_query
+    text = "С"
     if int(query.data) == 1 or int(query.data) == 2:
-        update.message.reply_text("обидно🤧")
+        text = "Обидно🤧\nНо с"
     user = query.message.chat.id
     con, cursor = main_csp.get_cursor()
     check = cursor.execute(f"SELECT user_id FROM marks").fetchall()
@@ -72,7 +73,7 @@ def add_mark_to_bd(bot, update):
         )
     else:
         update.bot.edit_message_caption(
-            caption="Спасибо за оценку! Этим вы помогаете мне понять, достаточно ли я хороша💞",
+            caption=text + "пасибо за оценку! Этим вы помогаете мне понять, достаточно ли я хороша💞",
             chat_id=user,
             message_id=query.message.message_id
         )
