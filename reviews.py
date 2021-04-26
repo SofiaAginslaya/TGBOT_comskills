@@ -13,7 +13,7 @@ def set_review(update, context):
                               "*Формат должен быть такой:*\n_SG, <ваше сообщение>_\n\n"
                               "*Убедительная просьба:\nПожалуйста, не делайте красную строку (абзац)*",
                               parse_mode=ParseMode.MARKDOWN,
-                              reply_markup=ReplyKeyboardMarkup([["вернуться обратно"]], resize_keyboard=True))
+                              reply_markup=ReplyKeyboardMarkup([["🔙вернуться обратно🔙"]], resize_keyboard=True))
 
 
 def add_review_to_file_and_bd(update, context):

@@ -6,7 +6,8 @@ from telegram import ReplyKeyboardMarkup, ParseMode
 def author(update, context):
     update.message.reply_text("Спасибо, что поинтересовался❣\nМне очень приятно💓\n\nВот мои контакты:\n@sofa_gans")
     con, cursor = main_csp.get_cursor()
-    cursor.execute(f"INSERT INTO counters_and_marks(username) VALUES(?)", (update.message.chat.username,))
+    cursor.execute(f"INSERT INTO counters_and_marks(username, name, contacts) VALUES(?, ?, ?)",
+                   (update.message.chat.username, update.message.chat.first_name + update.message.chat.last_name, 0))
     con.commit()
     con.close()
 

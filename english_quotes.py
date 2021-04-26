@@ -20,6 +20,5 @@ def get_quote(update, context):
     json_response = response.json()
     print(json_response['quote'])
     update.message.reply_text(json_response['quote'],
-                              reply_markup=ReplyKeyboardMarkup([["🔃следующая цитата🔃"],
-                                                                ["я закончил"], ["я закончила"]],
+                              reply_markup=ReplyKeyboardMarkup([["🔃следующая цитата🔃"], main_csp.FINISH_TALKING],
                                                                resize_keyboard=True))

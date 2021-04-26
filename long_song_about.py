@@ -53,5 +53,5 @@ def song_about_word(update, context):
     word_random = words_list[words_list.find(str(random_number)) +
                              len(str(random_number)):words_list.find(str(random_number + 1))]
     update.message.reply_text('_' + word_random + '_',
-                              reply_markup=ReplyKeyboardMarkup([["🔃следующее слово🔃"], ["я закончил"], ["я закончила"]],
+                              reply_markup=ReplyKeyboardMarkup([["🔃следующее слово🔃"], main_csp.FINISH_TALKING],
                                                                resize_keyboard=True), parse_mode=ParseMode.MARKDOWN)
