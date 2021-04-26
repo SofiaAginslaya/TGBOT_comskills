@@ -1,4 +1,4 @@
-# для развития коммуникативных навыков
+# для увеличения словарного запаса
 from telegram import ParseMode, ReplyKeyboardMarkup
 import main_csp
 
