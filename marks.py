@@ -1,3 +1,4 @@
+# оценки
 import main_csp
 from telegram import ReplyKeyboardMarkup, InlineKeyboardMarkup, InlineKeyboardButton
 
