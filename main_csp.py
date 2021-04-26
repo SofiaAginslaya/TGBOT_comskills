@@ -25,7 +25,7 @@ FINISH_TALKING = ["🏁я закончил🏁", "🐒позвать Sofia🐒"]
 
 
 def start(update, context):
-    update.message.reply_text(f"Привет, {update.message.chat.first_name}!👋 Я Ваш бот-помощник по развитию "
+    update.message.reply_text(f"Привет, {str(update.message.chat.first_name)}!👋 Я Ваш бот-помощник по развитию "
                               f"коммуникативных навыков.\n\nМожете называть меня Sofia! :)",
                               reply_markup=ReplyKeyboardMarkup(MAIN_MENU,
                                                                one_time_keyboard=False, resize_keyboard=True))

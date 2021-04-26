@@ -61,6 +61,7 @@ def add_mark_to_bd(bot, update):
         )
         result = f'''INSERT INTO marks(user_id, username, name, mark) VALUES(?, ?, ?, ?)'''
         cursor.execute(result, (query.message.chat.id, query.message.chat.username,
-                                query.message.chat.first_name + query.message.chat.last_name, int(query.data)))
+                                str(query.message.chat.first_name) + str(query.message.chat.last_name),
+                                int(query.data)))
         con.commit()
         con.close()

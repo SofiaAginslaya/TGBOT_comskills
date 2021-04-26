@@ -7,7 +7,8 @@ def author(update, context):
     update.message.reply_text("Спасибо, что поинтересовался❣\nМне очень приятно💓\n\nВот мои контакты:\n@sofa_gans")
     con, cursor = main_csp.get_cursor()
     cursor.execute(f"INSERT INTO counters_and_marks(username, name, contacts) VALUES(?, ?, ?)",
-                   (update.message.chat.username, update.message.chat.first_name + update.message.chat.last_name, 0))
+                   (update.message.chat.username,
+                    str(update.message.chat.first_name) + str(update.message.chat.last_name), 0))
     con.commit()
     con.close()
 
@@ -25,7 +26,7 @@ def get_rating(update, context):
     con, cursor = main_csp.get_cursor()
     result = cursor.execute(f"SELECT mark FROM marks").fetchall()
     summa, kolvo = main_csp.counter_comparison(result)
-    update.message.reply_text("*🙊Рейтинг бота:*\n_👉" + str(summa / kolvo) + " / 5👈_\n\nКажется, я не так плоха💌",
+    update.message.reply_text("*🙊Рейтинг бота:*\n_👉" + str(summa / kolvo)[:4] + " / 5👈_\n\nКажется, я не так плоха💌",
                               parse_mode=ParseMode.MARKDOWN,
                               reply_markup=ReplyKeyboardMarkup(main_csp.SECTION_OTHER, resize_keyboard=True))
     con.close()

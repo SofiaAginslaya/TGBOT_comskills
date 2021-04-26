@@ -25,7 +25,8 @@ def add_review_to_file_and_bd(update, context):
     con, cursor = main_csp.get_cursor()
     result = f'''INSERT INTO reviews(user_id, username, name, review) VALUES(?, ?, ?, ?)'''
     cursor.execute(result, (update.message.chat.id, update.message.chat.username,
-                            update.message.chat.first_name + update.message.chat.last_name, update.message.text))
+                            str(update.message.chat.first_name) + str(update.message.chat.last_name),
+                            update.message.text))
     con.commit()
     con.close()
 
