@@ -6,17 +6,21 @@ import vocabulary
 import long_song_about
 import english_quotes
 import other
+import marks
+import reviews
 import sqlite3
 
 
 MAIN_MENU = [["🦋все упражнения🦋"], ["↪прочее↩"]]
 MENU_MANY_WORDS = [["🐣для увеличения словарного запаса🐥"], ["🎤что вижу, о том и пою🎤"],
                    ["🔡развитие английской речи🔠	"], ["🔙вернуться в главное меню🔙"]]
-SECTION_OTHER = [["🐝оценка🐝"], ["🐾автор проекта🐾"], ["👣мотивация создания бота👣"], ["🔙вернуться в главное меню🔙"]]
+SECTION_OTHER = [["💯оценка💯", "🐝отзывы🐝"], ["🐾автор проекта🐾"], ["👣мотивация создания бота👣"],
+                 ["🔙вернуться в главное меню🔙"]]
 PART_OF_SPEECH = [["имена\nсуществительные", "имена\nприлагательные"], ["глаголы", "наречия"],
                   ["🔙вернуться назад🔙", "🐒позвать Sofia🐒"]]
 MARK_MENU = [["🆕поставить оценку🆕", "💌узнать рейтинг💌", "🔢изменить оценку🔢"],
              ["🔙вернуться обратно🔙", "🐒позвать Sofia🐒"]]
+REVIEWS_MENU = [["оставить отзыв", "посмотреть отзывы"], ["вернуться обратно"]]
 
 
 def start(update, context):
@@ -80,16 +84,23 @@ def main():
 
     dp.add_handler(MessageHandler(Filters.regex("прочее"), otherr))
     dp.add_handler(CommandHandler("other", otherr))
-    dp.add_handler(MessageHandler(Filters.regex("поставить оценку"), other.set_mark))
-    dp.add_handler(MessageHandler(Filters.regex("изменить оценку"), other.change_mark))
     dp.add_handler(CommandHandler("rating", other.get_rating))
     dp.add_handler(MessageHandler(Filters.regex("рейтинг"), other.get_rating))
-    dp.add_handler(MessageHandler(Filters.regex("оценка"), other.mark))
-    dp.add_handler(CallbackQueryHandler(other.add_mark_to_bd))
     dp.add_handler(MessageHandler(Filters.regex("автор"), other.author))
     dp.add_handler(CommandHandler("author", other.author))
     dp.add_handler(MessageHandler(Filters.regex("мотивация"), other.motivation))
     dp.add_handler(CommandHandler("motivation", other.motivation))
+
+    dp.add_handler(MessageHandler(Filters.regex("поставить оценку"), marks.set_mark))
+    dp.add_handler(MessageHandler(Filters.regex("изменить оценку"), marks.change_mark))
+    dp.add_handler(MessageHandler(Filters.regex("оценка"), marks.mark))
+    dp.add_handler(CallbackQueryHandler(marks.add_mark_to_bd))
+
+    dp.add_handler(MessageHandler(Filters.regex("оставить отзыв"), reviews.set_review))
+    dp.add_handler(MessageHandler(Filters.regex("посмотреть отзывы"), reviews.get_reviews))
+    dp.add_handler(MessageHandler(Filters.regex("SG"), reviews.add_review_to_file_and_bd))
+    dp.add_handler(MessageHandler(Filters.regex("отзывы"), reviews.reviews))
+    dp.add_handler(CommandHandler("reviews", reviews.get_reviews))
 
     dp.add_handler(CommandHandler("all_ex", all_ex))
     dp.add_handler(MessageHandler(Filters.regex("все упражнения"), all_ex))

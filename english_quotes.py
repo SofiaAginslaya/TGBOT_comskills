@@ -7,7 +7,6 @@ from telegram import ReplyKeyboardMarkup, ParseMode
 def english_speech(update, context):
     con, cursor = main_csp.get_cursor()
     letter = update.message.text
-    print(letter)
     goal = cursor.execute(f"SELECT goal, how_to_do FROM parts_of_speech WHERE part_of_sp ='{letter[1:-1]}' ").fetchone()
     update.message.reply_text("*Цель:* \n☑ _" + goal[0] + "_☑", parse_mode=ParseMode.MARKDOWN)
     update.message.reply_text("*Как выполнять:* \n🆙" + goal[1], parse_mode=ParseMode.MARKDOWN,
